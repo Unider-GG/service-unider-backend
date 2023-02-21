@@ -12,8 +12,11 @@ $ yarn install
 ## Running the app
 
 ```bash
-# setup database
+# application startup
 $ docker-compose up -d
+
+# close and delete application container
+$ docker-compose down
 
 # development
 $ yarn run start
