@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { GoogleApiService } from 'src/shared/google-api/google-api.service';
 import { GooglePlacesAPIQuery } from 'src/shared/models/googleAPI';
 
 @Injectable()
 export class HangOutService {
-  constructor(private readonly googleAPIService: GoogleApiService) {}
+  @Inject(GoogleApiService)
+  private readonly googleAPIService: GoogleApiService;
 
   async getNearbysearchHangOut({
     latitude,

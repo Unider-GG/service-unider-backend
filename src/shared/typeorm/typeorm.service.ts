@@ -20,6 +20,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       migrationsTableName: this.config.get<string>('DB_NAME'),
       logger: 'file',
       synchronize: this.config.get<boolean>('DB_SYNC'), // never use TRUE in production!
+      autoLoadEntities: true,
     };
   }
 }

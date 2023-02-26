@@ -4,29 +4,48 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  Unique,
 } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Entity()
+@Unique(['email'])
 export class User {
-  @PrimaryGeneratedColumn()
-  public id!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
-  @Column({ type: 'varchar', length: 120 })
-  public name: string;
+  @Column({ nullable: false, type: 'varchar', length: 120 })
+  name: string;
 
-  @Column({ type: 'varchar', length: 120 })
-  public email: string;
+  @Column({ nullable: false, type: 'varchar', length: 120 })
+  email: string;
 
-  @Column({ type: 'boolean', default: false })
-  public isDeleted: boolean;
+  @Column({ nullable: false, type: 'int' })
+  role: number;
 
-  /*
-   * Create and Update Date Columns
-   */
+  @Column({ nullable: false })
+  password: string;
+
+  @Column({ nullable: false })
+  salt: string;
+
+  @Column({ nullable: true, type: 'varchar', length: 64 })
+  confirmationToken: string;
+
+  @Column({ nullable: true, type: 'varchar', length: 64 })
+  recoverToken: string;
 
   @CreateDateColumn({ type: 'timestamp' })
-  public createdAt!: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
-  public updatedAt!: Date;
+  updatedAt!: Date;
+
+  @Column({ nullable: false, type: 'boolean', default: false })
+  isDeleted: boolean;
+
+  async checkPassword(password: string): Promise<boolean> {
+    const hash = await bcrypt.hash(password, this.salt);
+    return hash === this.password;
+  }
 }
